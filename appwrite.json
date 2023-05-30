@@ -1,0 +1,34 @@
+{
+    "projectId": "64746091a70356030c3d",
+    "projectName": "FanOut",
+    "functions": [
+        {
+            "$id": "64752e8e4407a54ce16d",
+            "name": "med_test_v0.2",
+            "runtime": "python-3.9",
+            "path": "functions/med_test_v0.2",
+            "entrypoint": "src/index.py",
+            "ignore": [
+                "__pypackages__"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        },
+        {
+            "$id": "647552724b67c10ef6b7",
+            "name": "dev-test",
+            "runtime": "python-3.9",
+            "path": "functions/dev-test",
+            "entrypoint": "src/index.py",
+            "ignore": [
+                "__pypackages__"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
