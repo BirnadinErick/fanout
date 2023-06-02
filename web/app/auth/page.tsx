@@ -26,17 +26,21 @@ export default function Auth() {
     client
       .setEndpoint("https://cloud.appwrite.io/v1")
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
-
+    const uid = createId();
     account
-      .create(createId(), email, pass, name)
+      .create(uid, email, pass, name)
       .then((res) => {
         console.info("sign up done!");
+        account
+          .createEmailSession(email, pass)
+          .then(() => router.push(`/bootstrap?uid=${uid}`))
+          .catch((err) => console.error(err));
+
+        router.push(`/bootstrap?uid=${uid}`);
       })
       .catch((err) => {
         console.error("something went wrong");
       });
-
-    router.push("/bootstrap");
   }
 
   return (
@@ -46,7 +50,7 @@ export default function Auth() {
     >
       <div>
         <h2>Authenticate Yourself</h2>
-        <p className="text-sm text-gray-400">
+        <p className="subtitle">
           You need to authenticate yourself to use the service
         </p>
       </div>
