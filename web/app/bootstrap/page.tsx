@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { Client, Databases, Functions } from "appwrite";
+import { Client, Databases } from "appwrite";
 import { COL_ID, DB_ID } from "./ids";
 import { createId } from "@paralleldrive/cuid2";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function SectionTitle({ title }: { title: string }) {
   return <h3 className="text-lg font-semibold">{title}</h3>;
@@ -37,21 +37,32 @@ function Section({
   );
 }
 
-export default function Bootstrap({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default function Bootstrap() {
   const [medium, setMedium] = useState("");
   const [dev, setDev] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  let uid: string | null;
+  if (searchParams.has("uid")) {
+    uid = searchParams.get("uid");
+  } else {
+    console.error("invalid URL");
+    throw new Error("FANOUT Exception: invalid URL, can't proceed further");
+  }
 
   function handleFormSubmit(
     e: FormEvent<HTMLFormElement>,
     med: string,
-    dev: string
+    dev: string,
+    uid: string | null
   ) {
     e.preventDefault();
+
+    if (uid === null) {
+      console.error("required param not given");
+      return 0;
+    }
 
     const client = new Client();
     const databases = new Databases(client);
@@ -60,9 +71,11 @@ export default function Bootstrap({
       .setEndpoint("https://cloud.appwrite.io/v1")
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
+    console.log(uid);
+
     databases
       .createDocument(DB_ID, COL_ID, createId(), {
-        uid: searchParams.uid!,
+        uid: uid,
         med: med,
         dev: dev,
       })
@@ -97,7 +110,7 @@ export default function Bootstrap({
         before proceeding!
       </blockquote>
 
-      <form onSubmit={(e) => handleFormSubmit(e, medium, dev)}>
+      <form onSubmit={(e) => handleFormSubmit(e, medium, dev, uid)}>
         <Section
           title="Medium Integration Token"
           state={medium}
