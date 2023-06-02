@@ -119,10 +119,7 @@ export default function Bootstrap() {
 
         <Section title="DEV.to Token" state={dev} setState={setDev} />
 
-        <button
-          className="p-2 my-4 border border-black transition-colors duration-200 ease-out hover:bg-gray-800 hover:text-white"
-          type="submit"
-        >
+        <button className="action-button" type="submit">
           Bootstrap
         </button>
       </form>
