@@ -33,15 +33,31 @@ export async function POST(request: NextRequest) {
     .setProject(proj_id!)
     .setKey(api_key!);
   log("client init-done!");
-  Promise.all([
-    functions.createExecution(dev_func_id!),
-    functions.createExecution(med_func_id!),
-  ]).then(([result_dev, result_med]) => {
-    info(result_dev);
-    info(result_med);
-    info(result_dev);
-    info(result_med);
-  });
+
+  // Promise.all([
+  //   functions.createExecution(dev_func_id!),
+  //   functions.createExecution(med_func_id!),
+  // ]).then(([result_dev, result_med]) => {
+  //   info(result_dev);
+  //   info(result_med);
+  //   info(result_dev);
+  //   info(result_med);
+  // });
+
+  log("triggering functions");
+  const med_res = await functions.createExecution(dev_func_id!);
+  const dev_res = await functions.createExecution(med_func_id!);
+
+  log(med_res);
+  log(dev_res);
+
   log("execution-done!");
   return NextResponse.json(1);
 }
+
+// export async function POST(request: NextRequest) {
+//   log("init execution")
+//   // POST to medium
+//   // POST to dev
+//   // return status
+// }
