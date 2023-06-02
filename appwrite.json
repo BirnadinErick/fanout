@@ -29,6 +29,20 @@
             "events": [],
             "schedule": "",
             "timeout": 15
+        },
+        {
+            "$id": "6478c3eadf25e163cd40",
+            "name": "save_tokens",
+            "runtime": "python-3.9",
+            "path": "functions/save_tokens",
+            "entrypoint": "src/index.py",
+            "ignore": [
+                "__pypackages__"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
         }
     ]
 }
