@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 const { Client, Functions } = require("node-appwrite");
-import { info, log } from "console";
+import { log } from "console";
 
 export async function POST(request: NextRequest) {
   log("init execution...");
@@ -34,22 +34,12 @@ export async function POST(request: NextRequest) {
     .setKey(api_key!);
   log("client init-done!");
 
-  // Promise.all([
-  //   functions.createExecution(dev_func_id!),
-  //   functions.createExecution(med_func_id!),
-  // ]).then(([result_dev, result_med]) => {
-  //   info(result_dev);
-  //   info(result_med);
-  //   info(result_dev);
-  //   info(result_med);
-  // });
-
   log("triggering functions");
   const med_res = await functions.createExecution(dev_func_id!);
   const dev_res = await functions.createExecution(med_func_id!);
 
-  log(med_res);
-  log(dev_res);
+  // log(med_res);
+  // log(dev_res);
 
   log("execution-done!");
   return NextResponse.json(1);
