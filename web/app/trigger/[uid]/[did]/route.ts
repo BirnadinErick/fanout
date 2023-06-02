@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 const { Client, Functions } = require("node-appwrite");
-import { info } from "console";
+import { info, log } from "console";
 
 export async function POST(request: NextRequest) {
   const proj_id = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
   if (
     [proj_id, dev_func_id, med_func_id, api_key].some((e) => e === undefined)
   ) {
+    [proj_id, dev_func_id, med_func_id, api_key].forEach((e) => log(e));
     throw Error("necessary env var not set");
   }
 

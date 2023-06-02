@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
   if (
     [proj_id, dev_func_id, med_func_id, api_key].some((e) => e === undefined)
   ) {
+    [proj_id, dev_func_id, med_func_id, api_key].forEach((e) => log(e));
     throw Error("necessary env var not set");
   }
 
@@ -30,13 +31,13 @@ export async function POST(request: NextRequest) {
     .setProject(proj_id!)
     .setKey(api_key!);
 
-  Promise.all([
-    functions.createExecution(dev_func_id!),
-    functions.createExecution(med_func_id!),
-  ]).then(([result_dev, result_med]) => {
-    debug(result_dev);
-    debug(result_med);
-  });
+  // Promise.all([
+  //   functions.createExecution(dev_func_id!),
+  //   functions.createExecution(med_func_id!),
+  // ]).then(([result_dev, result_med]) => {
+  //   debug(result_dev);
+  //   debug(result_med);
+  // });
 
   return NextResponse.json(1);
 }
