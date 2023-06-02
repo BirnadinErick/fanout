@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { Client, Functions } from "appwrite";
+import { Client, Databases, Functions } from "appwrite";
+import { COL_ID, DB_ID } from "./ids";
+import { createId } from "@paralleldrive/cuid2";
+import { useRouter } from "next/navigation";
 
 function SectionTitle({ title }: { title: string }) {
   return <h3 className="text-lg font-semibold">{title}</h3>;
@@ -34,9 +37,14 @@ function Section({
   );
 }
 
-export default function Bootstrap() {
+export default function Bootstrap({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const [medium, setMedium] = useState("");
   const [dev, setDev] = useState("");
+  const router = useRouter();
 
   function handleFormSubmit(
     e: FormEvent<HTMLFormElement>,
@@ -46,25 +54,22 @@ export default function Bootstrap() {
     e.preventDefault();
 
     const client = new Client();
-    const functions = new Functions(client);
+    const databases = new Databases(client);
 
     client
       .setEndpoint("https://cloud.appwrite.io/v1")
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
-    const promise = functions.createExecution(
-      process.env.NEXT_PUBLIC_APPWRITE_SAVE_TOKEN_FUNC_ID!,
-      `123.${med}.${dev}`
-    );
-
-    promise.then(
-      function (response) {
-        console.log(response);
-      },
-      function (error) {
-        console.log(error);
-      }
-    );
+    databases
+      .createDocument(DB_ID, COL_ID, createId(), {
+        uid: searchParams.uid!,
+        med: med,
+        dev: dev,
+      })
+      .then((res) =>
+        router.push(`/bootstrap/webhook?uid=${res.uid}&did=${res.$id}`)
+      )
+      .catch((err) => console.error(err));
   }
 
   return (
