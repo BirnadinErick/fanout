@@ -13,3 +13,11 @@ h2 {
 .subtitle {
     @apply text-sm text-gray-400;
 }
+
+.action-button {
+    @apply p-2 my-4 border border-black transition-colors duration-200 ease-out hover:bg-gray-800 hover:text-white;
+}
+
+pre {
+    @apply block overflow-auto p-1 my-2 text-gray-900 bg-gray-300;
+}
