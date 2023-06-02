@@ -3,8 +3,8 @@ const { Client, Functions } = require("node-appwrite");
 import { debug, log } from "console";
 
 export async function POST(request: NextRequest) {
-  const proj_id = process.env.APPWRITE_PROJECT_ID
-    ? process.env.APPWRITE_PROJECT_ID
+  const proj_id = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
+    ? process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
     : undefined;
   const dev_func_id = process.env.APPWRITE_DEV_FUNC_ID
     ? process.env.APPWRITE_DEV_FUNC_ID
