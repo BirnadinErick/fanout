@@ -3,7 +3,7 @@ export default function Disclaimer() {
     <main className="p-8">
       <section>
         <h2>Disclaimer</h2>
-        <p>
+        <p className="subtitle">
           Some vital information you need to know before proceeding to Fan-Out
         </p>
       </section>
