@@ -26,7 +26,9 @@ export default function Auth() {
     client
       .setEndpoint("https://cloud.appwrite.io/v1")
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
+
     const uid = createId();
+
     account
       .create(uid, email, pass, name)
       .then((res) => {
@@ -89,10 +91,7 @@ export default function Auth() {
           onChange={(e) => setPass(e.target.value)}
         />
       </div>
-      <button
-        type="submit"
-        className="p-2 my-4 border border-black transition-colors duration-200 ease-out hover:bg-gray-800 hover:text-white"
-      >
+      <button type="submit" className="action-button">
         Sign Me In
       </button>
     </form>
