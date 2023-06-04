@@ -18,6 +18,59 @@ async function fetch_hn(query, variables = {}) {
   return data;
 }
 
+async function post_to(url, data, headers) {
+  return axios.post(url, data, headers);
+}
+
+async function post_to_dev(datum, key) {
+  return post_to(
+    "https://dev.to/api/articles",
+    {
+      article: {
+        title: datum.title,
+        body_markdown: datum.contentMarkdown,
+        published: true,
+        description: datum.brief,
+        tags: [],
+        organization_id: 0,
+        series: "",
+        main_image: datum.coverImage,
+        canonical_url: "",
+      },
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": key,
+      },
+    }
+  );
+}
+
+async function post_to_med(datum, key) {
+  const url = "https://api.medium.com/v1";
+  const base_headers = {
+    Authorization: `Bearer ${key}`,
+    "Content-Type": "application/json",
+  };
+
+  const { data } = await axios.get(`${url}/me`, { headers: base_headers });
+  const uid = data.id;
+
+  return post_to(
+    `${url}/users/${uid}/posts`,
+    {
+      title: datum.title,
+      contentFormat: "markdown",
+      content: datum.contentMarkdown,
+      canonical_url: "",
+      tags: "",
+      publishStatus: "public",
+    },
+    base_headers
+  );
+}
+
 const GET_POST_DETAILS = `
     query GetPostDetails($slug:String!) {
       post(slug:$slug, hostname:""){
@@ -32,10 +85,10 @@ const GET_POST_DETAILS = `
 
 module.exports = async function (req, res) {
   const payload = JSON.parse(req.payload);
-  console.log(payload);
+  // console.log(payload);
   const result = await fetch_hn(GET_POST_DETAILS, { slug: payload.slug });
   const datum = result.data.post;
-  console.log(datum);
+  // console.log(datum);
 
   const client = new sdk.Client();
   const database = new sdk.Databases(client);
@@ -52,33 +105,18 @@ module.exports = async function (req, res) {
   );
 
   try {
-    const dev_post = await axios.post(
-      "https://dev.to/api/articles",
-      {
-        article: {
-          title: datum.title,
-          body_markdown: datum.contentMarkdown,
-          published: true,
-          description: datum.brief,
-          tags: [],
-          organization_id: 0,
-          series: "",
-          main_image: datum.coverImage,
-          canonical_url: "",
-        },
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": doc.dev,
-        },
-      }
-    );
+    const dev_post = await post_to_dev(datum, doc.dev);
     console.log(dev_post);
-    res.send(1);
   } catch (e) {
-    console.log(e);
     console.error(e);
-    res.send(0);
   }
+
+  // try {
+  //   const med_post = await post_to_med(datum, doc.med);
+  //   console.log(med_post);
+  // } catch (e) {
+  //   console.error(e);
+  // }
+
+  res.send(1);
 };
