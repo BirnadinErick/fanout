@@ -72,6 +72,21 @@
             "events": [],
             "schedule": "",
             "timeout": 15
+        },
+        {
+            "$id": "647cac0e9d1400c7650b",
+            "name": "fan-out-to-dev",
+            "runtime": "node-16.0",
+            "path": "functions/fan-out-to-dev",
+            "entrypoint": "src/index.js",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
         }
     ]
 }
