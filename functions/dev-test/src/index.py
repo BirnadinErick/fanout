@@ -8,22 +8,11 @@ def main(req, res):
       'Content-Type': 'application/json',
       'api-key': DEV_API_KEY,
     }
+  # payload = json.loads(req.payload)
+  print(req.payload)
 
-  PAYLOAD = {
-    "article": {
-      "title": "Fan Out second post",
-      "body_markdown": "# Hello world \n --- \n *test* \n - hi \n - hello",
-      "published": True,
-      "description": "fan out first test post",
-      "tags": "#helloowrl#jesus".split("#"),
-      "organization_id": 0,
-      "series": "",
-      "main_image": "https://unsplash.com/photos/VQK9J5reAWo/download?ixid=M3wxMjA3fDB8MXxhbGx8MTB8fHx8fHwyfHwxNjg1NDA4NDQ5fA&force=true&w=1920",
-      "canonical_url": ""
-    }
-  }
-
-  resp = r.post(URL, data=json.dumps(PAYLOAD), headers=HEADERS)
+  # resp = r.post(URL, data=json.dumps(PAYLOAD), headers=HEADERS)
+  resp = r.post(URL, data=req.payload, headers=HEADERS)
 
   if resp.status_code == 201:
       print(resp.json())

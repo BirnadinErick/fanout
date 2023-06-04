@@ -43,6 +43,35 @@
             "events": [],
             "schedule": "",
             "timeout": 15
+        },
+        {
+            "$id": "647aaf2e5753d9be0106",
+            "name": "hashnode-get",
+            "runtime": "python-3.9",
+            "path": "functions/hashnode-get",
+            "entrypoint": "src/index.py",
+            "ignore": [
+                "__pypackages__"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        },
+        {
+            "$id": "647ab1e431ebaa685b6e",
+            "name": "hn-test",
+            "runtime": "node-16.0",
+            "path": "functions/hn-test",
+            "entrypoint": "src/index.js",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
         }
     ]
 }
