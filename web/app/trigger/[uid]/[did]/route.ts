@@ -2,12 +2,42 @@ import { NextRequest, NextResponse } from "next/server";
 const { Client, Functions } = require("node-appwrite");
 import { log } from "console";
 
+const GET_SLUGS = `
+query GetSlugs($user:String!){
+  user(username: $user) {
+    publication {
+      posts(page: 0) {
+        slug
+      }
+    }
+  }
+
+}
+`;
+
+async function fetch_hn(query: string, variables = {}) {
+  const res = await fetch("https://api.hashnode.com", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+  const json_data = await res.json();
+
+  return json_data.data;
+}
+
 export async function POST(request: NextRequest) {
   log("init execution...");
 
   log("parsing url...");
   const { pathname } = new URL(request.url);
   const [uid, did] = pathname.split("/");
+  log("uid:", uid, " did:", did);
 
   const proj_id = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
     ? process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
@@ -37,15 +67,20 @@ export async function POST(request: NextRequest) {
     .setKey(api_key!);
   log("client init-done!");
 
+  log("getting slugs");
+  const data = await fetch_hn(GET_SLUGS, { user: "birnadine" });
+  log("data from hn is \n", data);
+
   log("triggering functions");
   const dev_res = await functions.createExecution(
     dev_func_id!,
     JSON.stringify({
       uid: uid,
       did: did,
-      slug: "",
+      slug: data.user.publication.posts[0].slug,
     })
   );
+  log(dev_res);
 
   log("execution-done!");
   return NextResponse.json(1);
