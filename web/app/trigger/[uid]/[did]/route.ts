@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
   log("parsing url...");
   const { pathname } = new URL(request.url);
-  const [uid, did] = pathname.split("/");
+  const [_, _path, uid, did] = pathname.split("/");
   log("uid:", uid, " did:", did);
 
   const proj_id = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
